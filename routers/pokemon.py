@@ -22,7 +22,7 @@ def search_pokemon_info(pokemon_data: Series):
     pokemon_info['speed'] = int(pokemon_data['speed'])
 
     pokemon_info['species_id'] = pokemon_data['species_id']
-    pokemon_info['evolves_from_species_id'] = pokemon_data['evolves_from_species_id']
+    #pokemon_info['evolves_from_species_id'] = pokemon_data['evolves_from_species_id']
 
     return pokemon_info
 
