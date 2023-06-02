@@ -10,6 +10,10 @@ A API possui os seguintes recursos:
 - `GET /pokemon/name/{pokemon_name}`: Retorna os detalhes de um Pokémon específico com base no nome.
 - `GET /pokemon/id/{pokemon_id}`: Retorna os detalhes de um Pokémon específico com base no ID.
 
+## URL da API
+
+A API está hospedada no Render.com e pode ser acessada através da seguinte URL: https://pokemon-api-ddmm.onrender.com
+
 ## Instalação
 
 1. Clone o repositório: `git clone https://github.com/Shinikatame/Pokemon-API.git`

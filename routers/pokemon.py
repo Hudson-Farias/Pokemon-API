@@ -3,6 +3,7 @@ from pandas import Series, read_csv
 
 router = APIRouter()
 df = read_csv('data/pokemon.csv')
+print(df)
 
 def search_pokemon_info(pokemon_data: Series):
     pokemon_info = {}
