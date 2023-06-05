@@ -4,43 +4,49 @@ from pandas import Series, read_csv
 router = APIRouter()
 df = read_csv('data/pokemon.csv')
 
-def search_pokemon_info(pokemon_data: Series):
-    pokemon_info = {}
+def search_pokemon_info(pokedex_row: Series):
+    pokemon = {}
 
-    pokemon_info['id'] = int(pokemon_data['id'])
-    pokemon_info['name'] = pokemon_data['identifier']
-    pokemon_info['color'] = pokemon_data['color']
+    pokemon['id'] = int(pokedex_row['id'])
+    pokemon['species_id'] = pokedex_row['species_id']
+    pokemon['name'] = pokedex_row['identifier']
+    pokemon['color'] = pokedex_row['color']
 
-    pokemon_info['type_1'] = pokemon_data['type_1']
-    pokemon_info['type_2'] = pokemon_data['type_2']
+    pokemon['types'] = [pokedex_row['type_1']]
 
-    pokemon_info['hp'] = int(pokemon_data['hp'])
-    pokemon_info['atk'] = int(pokemon_data['atk'])
-    pokemon_info['def'] = int(pokemon_data['def'])
-    pokemon_info['spatk'] = int(pokemon_data['spatk'])
-    pokemon_info['spdef'] = int(pokemon_data['spdef'])
-    pokemon_info['speed'] = int(pokemon_data['speed'])
+    if pokedex_row['type_2'] not in pokemon['types']:
+        pokemon['types'].append(pokedex_row['type_2'])
 
-    pokemon_info['species_id'] = pokemon_data['species_id']
-    #pokemon_info['evolves_from_species_id'] = pokemon_data['evolves_from_species_id']
-
-    return pokemon_info
+    return pokemon
 
 
-@router.get('/pokemon/name/{pokemon_name}')
+@router.get('/pokedex/pokemon/name/{pokemon_name}')
 async def router_pokemon_name(pokemon_name: str):
-    pokemons_df = df[df['identifier'].str.contains(pokemon_name)]
-    return [search_pokemon_info(row) for _, row in pokemons_df.iterrows()]
+    pokemons_series = df[df['identifier'].str.contains(pokemon_name)]
+    pokedex = [search_pokemon_info(row) for _, row in pokemons_series.iterrows()]
+    return pokedex
 
 
-@router.get('/pokemon/id/{pokemon_id}')
+@router.get('/pokedex/pokemon/id/{pokemon_id}')
 async def router_pokemon_id(pokemon_id: int):
-    pokemon_series = [row for _, row in df[df['id'] == pokemon_id].iterrows()]
-    return search_pokemon_info(pokemon_series[0])
+    pokedex_row = [row for _, row in df[df['id'] == pokemon_id].iterrows()][0]
+    pokemon = search_pokemon_info(pokedex_row)
 
+    pokemon['hp'] = int(pokedex_row['hp'])
+    pokemon['atk'] = int(pokedex_row['atk'])
+    pokemon['def'] = int(pokedex_row['def'])
+    pokemon['spatk'] = int(pokedex_row['spatk'])
+    pokemon['spdef'] = int(pokedex_row['spdef'])
+    pokemon['speed'] = int(pokedex_row['speed'])
 
-pokedex = [{'id':int(row['id']), 'name': row['identifier']} for _, row in df.iterrows()]
+    # pokemon_info['evolves_from_species_id'] = pokemon_data['evolves_from_species_id']
 
-@router.get('/pokemon/')
-async def router_pokemon():
+    return pokemon
+
+@router.get('/pokedex/page/{page}')
+async def router_pokemon(page: int):
+    i = 30 * page
+
+    pokemons_series = df.iloc[i-30:i]
+    pokedex = [search_pokemon_info(row) for _, row in pokemons_series.iterrows()]
     return pokedex
