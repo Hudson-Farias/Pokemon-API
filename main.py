@@ -6,6 +6,15 @@ from os import listdir
 
 app = FastAPI(docs_url = '/')
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = ['*'],
+    allow_credentials = True,
+    allow_methods = ['*'],
+    allow_headers = ['*']
+)
+
+
 def load(path = 'routers'): 
     for file in listdir(path):
         if file not in ['__pycache__', '__init__.py']:

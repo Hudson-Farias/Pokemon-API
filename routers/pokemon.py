@@ -19,7 +19,6 @@ def search_pokemon_info(pokedex_row: Series):
 
     return pokemon
 
-
 @router.get('/pokedex/pokemon/name/{pokemon_name}')
 async def router_pokemon_name(pokemon_name: str):
     pokemons_series = df[df['identifier'].str.contains(pokemon_name)]
@@ -42,6 +41,7 @@ async def router_pokemon_id(pokemon_id: int):
     # pokemon_info['evolves_from_species_id'] = pokemon_data['evolves_from_species_id']
 
     return pokemon
+
 
 @router.get('/pokedex/page/{page}')
 async def router_pokemon(page: int):
