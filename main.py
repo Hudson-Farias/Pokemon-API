@@ -7,6 +7,28 @@ from os import listdir
 
 app = FastAPI(docs_url = '/')
 
+origins = [
+    'http://pokenext-shinikatame.vercel.app',
+    'https://pokenext-shinikatame.vercel.app',
+
+    'http://pokenext-git-main-shinikatame.vercel.app',
+    'https://pokenext-git-main-shinikatame.vercel.app',
+
+    'http://pokenext-sigma-eight.vercel.app',
+    'https://pokenext-sigma-eight.vercel.app',
+
+    'http://pokenext-6if1aljh5-shinikatame.vercel.app',
+    'https://pokenext-6if1aljh5-shinikatame.vercel.app'
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = origins,
+    allow_credentials = True,
+    allow_methods = ['GET'],
+    allow_headers = ['*']
+)
+
 def load(path = 'routers'): 
     for file in listdir(path):
         if file not in ['__pycache__', '__init__.py']:
